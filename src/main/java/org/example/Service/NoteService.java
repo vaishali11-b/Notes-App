@@ -1,24 +1,33 @@
 package org.example.Service;
 
+import org.example.DAO.NoteRepo;
 import org.example.Entity.Note;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-@Service
-public class NoteService {
-    private Map<String, Note> map = new HashMap<>();
+import javax.transaction.Transactional;
+import java.util.*;
 
-    @Async
-    public Note createNote(String name, String content) {
+@Service
+@Transactional
+public class NoteService {
+    private final Map<String, Note> map = new HashMap<>();
+    /*
+    private final NoteRepo noteRepo;
+
+    @Autowired
+    public NoteService(NoteRepo noteRepo) {
+        this.noteRepo = noteRepo;
+    }
+     */
+
+    public void createNote(String name, String content) {
         Note newNote = new Note();
         newNote.setName(name);
         newNote.setContent(content);
         map.put(name, newNote);
-        return newNote;
     }
-    @Async
+
     public String deleteNote(String name) {
         Note ret = map.remove(name);
         if (null == ret) {
@@ -26,17 +35,18 @@ public class NoteService {
         }
         return "Deleted note " + name;
     }
-    @Async
+
     public String updateNote(String name, String newContent) {
         if (map.containsKey(name)) {
             Note newNote = new Note();
             newNote.setName(name);
             newNote.setContent(newContent);
             map.put(name, newNote);
+            return name + " updated";
         }
-        return newContent;
+        return name + " note not found";
     }
-    @Async
+
     public String viewNote(String name) {
         Note note = map.get(name);
         if (null != note)
@@ -44,12 +54,18 @@ public class NoteService {
         else
             return "No note found with name " + name;
     }
-    @Async
-    public Map<String, String> allNotes() {
+
+    // deprecated
+    public Map<String, String> _allNotes() {
         Map<String, String> ret = new HashMap<>();
         for (Note n : map.values()) {
             ret.put(n.getName(), n.getContent());
         }
         return ret;
+    }
+
+    public List<Note> allNotes() {
+        return new ArrayList<>();
+        //return noteRepo.findAll();
     }
 }

@@ -6,52 +6,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping
 public class NoteController {
+
     private final NoteService noteService;
 
     @Autowired
     public NoteController(NoteService noteService) {
         this.noteService = noteService;
     }
-/*
-    @RequestMapping("/error")
-    public String error() {
-        return "Error Handling";
-    }
-*/
+
     @PostMapping("/note")
-    public ResponseEntity<Note> createNote(@RequestBody Note note) {
-        Note savedNote = noteService.createNote(note.getName(), note.getContent());
-        return ResponseEntity.ok(savedNote);
+    public String createNote(@RequestBody Note note) {
+        noteService.createNote(note.getName(), note.getContent());
+        return "Note has been created";
     }
 
-    @GetMapping("/allNote")
-    public ResponseEntity<Map<String, String>> allNotes() {
-        Map<String, String> note = noteService.allNotes();
+    @GetMapping("/viewAll")
+    public ResponseEntity<List<Note>> viewAllNotes() {
+        List<Note> note = noteService.allNotes();
         return ResponseEntity.ok(note);
     }
 
-    @GetMapping("/view/{name}")
-    public ResponseEntity<String> viewNote(@PathVariable String name) {
+    @GetMapping("/view")
+    public ResponseEntity<String> viewNote(@RequestParam(value = "name") String name) {
         String view = noteService.viewNote(name);
         return ResponseEntity.ok(view);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updateNote(
-            @RequestParam (value = "name") String name,
-            @RequestParam (value = "content") String newContent) {
-        String updated = noteService.updateNote(name, newContent);
-        return ResponseEntity.ok(updated);
+    public String updateNote(@RequestBody Note note) {
+        return noteService.updateNote(note.getName(), note.getContent());
     }
 
     @DeleteMapping("/delete/{name}")
-    public ResponseEntity<String> deleteNote(@PathVariable String name){
-        String deleted = noteService.deleteNote(name);
-        return ResponseEntity.ok(deleted);
+    public String deleteNote(@PathVariable String name) {
+        return noteService.deleteNote(name);
     }
 }
