@@ -55,17 +55,8 @@ public class NoteService {
             return "No note found with name " + name;
     }
 
-    // deprecated
-    public Map<String, String> _allNotes() {
-        Map<String, String> ret = new HashMap<>();
-        for (Note n : map.values()) {
-            ret.put(n.getName(), n.getContent());
-        }
-        return ret;
-    }
-
     public List<Note> allNotes() {
-        return new ArrayList<>();
+        return new ArrayList<>(map.values());
         //return noteRepo.findAll();
     }
 }

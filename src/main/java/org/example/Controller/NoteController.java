@@ -19,7 +19,7 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @PostMapping("/note")
+    @PostMapping("/create")
     public String createNote(@RequestBody Note note) {
         noteService.createNote(note.getName(), note.getContent());
         return "Note has been created";
