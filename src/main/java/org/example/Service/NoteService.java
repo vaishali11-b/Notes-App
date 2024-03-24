@@ -20,41 +20,42 @@ public class NoteService {
     }
 
     public void createNote(String name, String content) {
-        Note newNote = new Note();
-        newNote.setName(name);
-        newNote.setContent(content);
-        map.put(name, newNote);
+        Note newNote = new Note(name, content);
+        noteRepo.save(newNote);
     }
 
     public String deleteNote(String name) {
-        Note ret = map.remove(name);
-        if (null == ret) {
+        Optional<Note> note = noteRepo.findById(name);
+        if (!note.isPresent()) {
             return name + " note not found";
+        } else {
+            noteRepo.deleteById(name);
+            return "Deleted note " + name;
         }
-        return "Deleted note " + name;
     }
 
     public String updateNote(String name, String newContent) {
-        if (map.containsKey(name)) {
-            Note newNote = new Note();
-            newNote.setName(name);
+        Optional<Note> note = noteRepo.findById(name);
+        if (note.isPresent()) {
+            Note newNote = note.get();
             newNote.setContent(newContent);
-            map.put(name, newNote);
+            noteRepo.save(newNote);
             return name + " updated";
+        } else {
+            return name + " note not found";
         }
-        return name + " note not found";
     }
 
     public String viewNote(String name) {
-        Note note = map.get(name);
-        if (null != note)
-            return note.getContent();
-        else
+        Optional<Note> value = noteRepo.findById(name);
+        if (value.isPresent()) {
+            return value.get().getContent();
+        } else {
             return "No note found with name " + name;
+        }
     }
 
     public List<Note> allNotes() {
-//        return new ArrayList<>(map.values());
         return noteRepo.findAll();
     }
 }
