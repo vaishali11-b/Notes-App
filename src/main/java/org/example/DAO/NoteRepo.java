@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface NoteRepo extends JpaRepository<Note, String> {
-//    List<Note> findAll();
+
 }

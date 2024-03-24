@@ -12,14 +12,12 @@ import java.util.*;
 @Transactional
 public class NoteService {
     private final Map<String, Note> map = new HashMap<>();
-    /*
     private final NoteRepo noteRepo;
 
     @Autowired
     public NoteService(NoteRepo noteRepo) {
         this.noteRepo = noteRepo;
     }
-     */
 
     public void createNote(String name, String content) {
         Note newNote = new Note();
@@ -56,7 +54,7 @@ public class NoteService {
     }
 
     public List<Note> allNotes() {
-        return new ArrayList<>(map.values());
-        //return noteRepo.findAll();
+//        return new ArrayList<>(map.values());
+        return noteRepo.findAll();
     }
 }

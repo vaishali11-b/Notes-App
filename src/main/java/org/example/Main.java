@@ -15,16 +15,12 @@ import java.util.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-@ComponentScan({"org.example.Service", "org.example.Controller"})
-@EntityScan("org.example.Entity")
-@EnableJpaRepositories("org.example.DAO")
+@SpringBootApplication
+@EnableJpaRepositories
 public class Main implements CommandLineRunner {
 /*
     @Autowired
     NoteService service;
-    @Autowired
-    JdbcTemplate jdbcTemplate;
 */
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
